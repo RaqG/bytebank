@@ -22,7 +22,7 @@ Dio addInterceptors(Dio dio) {
 
 BaseOptions addOptions() {
   return BaseOptions(
-    baseUrl: 'http://192.168.15.192:8080',
+    baseUrl: 'http://localhost:8080',
     receiveTimeout: 15000,
     connectTimeout: 15000,
   );
