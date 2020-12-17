@@ -1,11 +1,11 @@
 import 'package:bytebank/components/contact_item.dart';
+import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contacts/contact_form.dart';
 import 'package:flutter/material.dart';
 
 const String _titleAppBar = 'Contacts';
-const String _loadingText = 'Loading...';
 const String _errorMessage = 'Unknown Error';
 
 class ContactsList extends StatefulWidget {
@@ -30,16 +30,7 @@ class _ContactsListState extends State<ContactsList> {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    Text(_loadingText),
-                  ],
-                ),
-              );
+              return Progress();
             case ConnectionState.active:
               break;
             case ConnectionState.done:
@@ -50,7 +41,8 @@ class _ContactsListState extends State<ContactsList> {
                   final ModelContact contact = contacts[index];
                   return ContactItem(
                     contact: contact,
-                    onPushScreen: () => _pushScreen(context, contact: contact),
+                    onPushScreen: (screen) =>
+                        _pushScreen(context, screen, contact: contact),
                     onDelete: () => _onDeleteContact(contact),
                   );
                 },
@@ -60,15 +52,15 @@ class _ContactsListState extends State<ContactsList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _pushScreen(context),
+        onPressed: () => _pushScreen(context, ContactForm()),
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void _pushScreen(context, {ModelContact contact}) {
-    final response = Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ContactForm(contact: contact)));
+  void _pushScreen(context, screen, {ModelContact contact}) {
+    final response = Navigator.push(
+        context, MaterialPageRoute(builder: (context) => screen));
     response.then((value) {
       setState(() {});
     }).catchError((e) => debugPrint("ERROR: ${e.message}"));

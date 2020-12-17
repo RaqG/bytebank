@@ -31,8 +31,7 @@ class ContactDao {
     /// Async-Await
     final Database db = await getDatabase();
     List<Map<String, dynamic>> result = await db.query(_tableName);
-    List<ModelContact> contacts = _toList(result);
-    return contacts;
+    return _toList(result);
 
     /// .then()
     // return getDatabase().then((db) {
@@ -71,22 +70,12 @@ class ContactDao {
   }
 
   Map<String, dynamic> _toMap(ModelContact contact) {
-    final Map<String, dynamic> contactMap = Map();
-    contactMap[_columnName] = contact.name;
-    contactMap[_columnAccountNumber] = contact.accountNumber;
-    return contactMap;
+    return contact.toJson(true);
   }
 
   List<ModelContact> _toList(List<Map<String, dynamic>> result) {
-    final List<ModelContact> contacts = List();
-    for (Map<String, dynamic> row in result) {
-      final ModelContact contact = ModelContact(
-        row[_columnId],
-        row[_columnName],
-        row[_columnAccountNumber],
-      );
-      contacts.add(contact);
-    }
+    final List<ModelContact> contacts =
+        result.map((dynamic json) => ModelContact.fromJson(json)).toList();
     return contacts;
   }
 }

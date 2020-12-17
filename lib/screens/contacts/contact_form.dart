@@ -1,3 +1,4 @@
+import 'package:bytebank/components/confirm_button.dart';
 import 'package:bytebank/components/editor.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
@@ -64,15 +65,9 @@ class _ContactFormState extends State<ContactForm> {
               hintText: _accountHintText,
               textInputType: TextInputType.number,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: SizedBox(
-                width: double.maxFinite,
-                child: RaisedButton(
-                  onPressed: () => _createUpdateContact(),
-                  child: Text(isEdit ? _editButton : _saveButton),
-                ),
-              ),
+            ConfirmButton(
+              buttonText: isEdit ? _editButton : _saveButton,
+              onPressed: () => _createUpdateContact(),
             ),
           ],
         ),
@@ -84,7 +79,8 @@ class _ContactFormState extends State<ContactForm> {
     final String fullName = _fullNameTextController.text;
     final int accountNumber = int.tryParse(_accountNumberTextController.text);
     if (fullName != null && accountNumber != null) {
-      final ModelContact newContact = ModelContact(0, fullName, accountNumber);
+      final ModelContact newContact =
+          ModelContact(id: 0, name: fullName, accountNumber: accountNumber);
       isEdit ? updateContact(newContact) : saveContact(newContact);
     } else {
       _scaffoldKey.currentState

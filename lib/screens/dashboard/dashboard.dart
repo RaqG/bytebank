@@ -1,9 +1,12 @@
+import 'package:bytebank/components/features_item.dart';
+import 'package:bytebank/screens/contacts/contacts_list.dart';
+import 'package:bytebank/screens/transactions/transactions_list.dart';
 import 'package:flutter/material.dart';
-
-import 'file:///D:/Users/raquelgallo/Documents/Flutter_Projects/bytebank/lib/screens/contacts/contacts_list.dart';
 
 const _titleAppBar = 'Dashboard';
 const _titleContact = 'Contacts';
+const _titleTransfer = 'Transfer';
+const _titleTransactionFeed = 'Transaction Feed';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key key}) : super(key: key);
@@ -19,7 +22,24 @@ class Dashboard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildLogoImage(),
-          buildContactCard(context),
+          Container(
+            height: 120,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                FeatureItem(
+                  title: _titleTransfer,
+                  icon: Icons.monetization_on_outlined,
+                  onPushScreen: () => _pushScreen(context, ContactsList()),
+                ),
+                FeatureItem(
+                  title: _titleTransactionFeed,
+                  icon: Icons.description,
+                  onPushScreen: () => _pushScreen(context, TransactionsList()),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -32,45 +52,7 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget buildContactCard(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        color: Theme.of(context).primaryColor,
-        child: InkWell(
-          onTap: () {
-            _pushScreen(context);
-          },
-          child: Container(
-            height: 100,
-            width: 160,
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.people,
-                  color: Colors.white,
-                  size: 24.0,
-                ),
-                Text(
-                  _titleContact,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _pushScreen(context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ContactsList()));
+  _pushScreen(context, screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 }

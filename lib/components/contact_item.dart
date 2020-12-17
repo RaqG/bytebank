@@ -1,6 +1,13 @@
 import 'package:bytebank/components/simple_dialog_item.dart';
 import 'package:bytebank/models/contact.dart';
+import 'package:bytebank/screens/contacts/contact_form.dart';
+import 'package:bytebank/screens/transactions/transaction_form.dart';
 import 'package:flutter/material.dart';
+
+const String _editContact = 'Edit contact';
+const String _deleteContact = 'Delete contact';
+const String _createTransaction = 'Create transaction';
+const String _alertTitle = 'Choose an option';
 
 class ContactItem extends StatelessWidget {
   final ModelContact contact;
@@ -32,18 +39,24 @@ class ContactItem extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       builder: (_) => SimpleDialog(
-        title: Text('Choose an option'),
+        title: Text(_alertTitle),
         children: [
+          SimpleDialogItem(
+            icon: Icons.monetization_on_outlined,
+            iconColor: Colors.green,
+            itemName: _createTransaction,
+            onClick: () => onPushScreen(TransactionForm(contact: contact)),
+          ),
           SimpleDialogItem(
             icon: Icons.edit_outlined,
             iconColor: Colors.grey,
-            itemName: 'Edit',
-            onClick: () => onPushScreen(),
+            itemName: _editContact,
+            onClick: () => onPushScreen(ContactForm(contact: contact)),
           ),
           SimpleDialogItem(
             icon: Icons.delete_outline,
             iconColor: Colors.red,
-            itemName: 'Delete',
+            itemName: _deleteContact,
             onClick: () => onDelete(),
           ),
         ],

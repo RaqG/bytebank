@@ -1,5 +1,6 @@
-import 'file:///D:/Users/raquelgallo/Documents/Flutter_Projects/bytebank/lib/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+
+import 'file:///D:/Users/raquelgallo/Documents/Flutter_Projects/bytebank/lib/screens/dashboard/dashboard.dart';
 
 void main() {
   runApp(BytebankApp());
