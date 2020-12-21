@@ -1,7 +1,4 @@
-import 'package:bytebank/components/simple_dialog_item.dart';
-import 'package:bytebank/models/contact.dart';
-import 'package:bytebank/screens/contacts/contact_form.dart';
-import 'package:bytebank/screens/transactions/transaction_form.dart';
+import 'package:bytebank/bytebank.dart';
 import 'package:flutter/material.dart';
 
 const String _editContact = 'Edit contact';

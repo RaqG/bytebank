@@ -1,6 +1,4 @@
-import 'package:bytebank/components/features_item.dart';
-import 'package:bytebank/screens/contacts/contacts_list.dart';
-import 'package:bytebank/screens/transactions/transactions_list.dart';
+import 'package:bytebank/bytebank.dart';
 import 'package:flutter/material.dart';
 
 const _titleAppBar = 'Dashboard';

@@ -1,7 +1,4 @@
-import 'package:bytebank/components/confirm_button.dart';
-import 'package:bytebank/components/editor.dart';
-import 'package:bytebank/database/dao/contact_dao.dart';
-import 'package:bytebank/models/contact.dart';
+import 'package:bytebank/bytebank.dart';
 import 'package:flutter/material.dart';
 
 const _errorMessage = 'Reveja os dados informados no formulário';

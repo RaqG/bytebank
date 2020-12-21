@@ -7,9 +7,9 @@ Future<Response> httpGet(path) async {
   return await dio.get(path);
 }
 
-Future<Response> httpPost(path, data) async {
+Future<Response> httpPost(path, data, password) async {
   Dio dio = createDio();
-  return await dio.post(path, options: getHeader(), data: data);
+  return await dio.post(path, options: getHeader(password), data: data);
 }
 
 Dio createDio() {
@@ -22,13 +22,16 @@ Dio addInterceptors(Dio dio) {
 
 BaseOptions addOptions() {
   return BaseOptions(
-    baseUrl: 'http://localhost:8080',
+    baseUrl: baseUrl,
     receiveTimeout: 15000,
     connectTimeout: 15000,
+    sendTimeout: 15000,
   );
 }
 
-getHeader() {
+getHeader(password) {
   return Options(
-      headers: {'Content-type': 'application/json', 'password': '1000'});
+      headers: {'Content-type': 'application/json', 'password': password});
 }
+
+const String baseUrl = 'http://localhost:8080';

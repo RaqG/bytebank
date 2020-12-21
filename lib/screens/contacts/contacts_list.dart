@@ -1,8 +1,4 @@
-import 'package:bytebank/components/contact_item.dart';
-import 'package:bytebank/components/progress.dart';
-import 'package:bytebank/database/dao/contact_dao.dart';
-import 'package:bytebank/models/contact.dart';
-import 'package:bytebank/screens/contacts/contact_form.dart';
+import 'package:bytebank/bytebank.dart';
 import 'package:flutter/material.dart';
 
 const String _titleAppBar = 'Contacts';
