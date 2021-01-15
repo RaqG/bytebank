@@ -1,4 +1,5 @@
 import 'package:bytebank/bytebank.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
 const String _titleAppBar = 'Contacts';
@@ -10,17 +11,16 @@ class ContactsList extends StatefulWidget {
 }
 
 class _ContactsListState extends State<ContactsList> {
-  final ContactDao _dao = ContactDao();
-
   @override
   Widget build(BuildContext context) {
+    AppDependencies dependencies = AppDependencies.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(_titleAppBar),
       ),
       body: FutureBuilder<List<ModelContact>>(
         initialData: [],
-        future: _dao.findAll(),
+        future: dependencies.contactDao.findAll(),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -39,7 +39,8 @@ class _ContactsListState extends State<ContactsList> {
                     contact: contact,
                     onPushScreen: (screen) =>
                         _pushScreen(context, screen, contact: contact),
-                    onDelete: () => _onDeleteContact(contact),
+                    onDelete: () =>
+                        _onDeleteContact(contact, dependencies.contactDao),
                   );
                 },
               );
@@ -62,8 +63,8 @@ class _ContactsListState extends State<ContactsList> {
     }).catchError((e) => debugPrint("ERROR: ${e.message}"));
   }
 
-  _onDeleteContact(ModelContact contact) {
-    _dao.delete(contact.id);
+  _onDeleteContact(ModelContact contact, ContactDao contactDao) {
+    contactDao.delete(contact.id);
     setState(() {});
   }
 }

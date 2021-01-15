@@ -7,7 +7,6 @@ const _titleTransfer = 'Transfer';
 const _titleTransactionFeed = 'Transaction Feed';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +14,44 @@ class Dashboard extends StatelessWidget {
       appBar: AppBar(
         title: Text(_titleAppBar),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildLogoImage(),
-          Container(
-            height: 120,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                FeatureItem(
-                  title: _titleTransfer,
-                  icon: Icons.monetization_on_outlined,
-                  onPushScreen: () => _pushScreen(context, ContactsList()),
-                ),
-                FeatureItem(
-                  title: _titleTransactionFeed,
-                  icon: Icons.description,
-                  onPushScreen: () => _pushScreen(context, TransactionsList()),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: buildBody(context),
     );
+  }
+
+  Widget buildBody(BuildContext context) {
+    return LayoutBuilder(
+        builder: (context, BoxConstraints constraints) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildLogoImage(),
+                    Container(
+                      height: 120,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          FeatureItem(
+                            title: _titleTransfer,
+                            icon: Icons.monetization_on_outlined,
+                            onPushScreen: () =>
+                                _pushScreen(context, ContactsList()),
+                          ),
+                          FeatureItem(
+                            title: _titleTransactionFeed,
+                            icon: Icons.description,
+                            onPushScreen: () =>
+                                _pushScreen(context, TransactionsList()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
   }
 
   Widget buildLogoImage() {

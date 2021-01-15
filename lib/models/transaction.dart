@@ -6,7 +6,12 @@ class ModelTransaction {
   ModelContact contact;
   String dateTime;
 
-  ModelTransaction({this.contact, this.dateTime, this.id, this.value});
+  ModelTransaction({
+    this.contact,
+    this.dateTime,
+    this.id,
+    this.value,
+  }) : assert(value > 0);
 
   factory ModelTransaction.fromJson(Map<String, dynamic> json) {
     return ModelTransaction(
@@ -29,4 +34,15 @@ class ModelTransaction {
     }
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ModelTransaction &&
+          runtimeType == other.runtimeType &&
+          value == other.value &&
+          contact == other.contact;
+
+  @override
+  int get hashCode => value.hashCode ^ contact.hashCode;
 }

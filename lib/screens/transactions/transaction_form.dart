@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:bytebank/bytebank.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 const _titleAppBar = 'New transaction';
-const _buttonTransferText = 'Transfer';
+const buttonTransferText = 'Transfer';
 const _sendingText = 'Sending...';
 const _successfulMessage = 'Successful transaction';
-const _valueLabelText = 'Value';
-const _valueHintText = 'Ex.: 125.67';
+const valueLabelText = 'Value';
+const valueHintText = 'Ex.: 125.67';
 
 class TransactionForm extends StatefulWidget {
   final ModelContact contact;
@@ -22,22 +23,22 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
-  final TransactionWebClient webClient = TransactionWebClient();
   final String transactionId = Uuid().v4();
 
   bool _sending = false;
 
   @override
   Widget build(BuildContext context) {
+    AppDependencies dependencies = AppDependencies.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(_titleAppBar),
       ),
-      body: buildBody(),
+      body: buildBody(dependencies),
     );
   }
 
-  Widget buildBody() {
+  Widget buildBody(AppDependencies dependencies) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -48,13 +49,13 @@ class _TransactionFormState extends State<TransactionForm> {
             _showContactInfo(),
             Editor(
               controller: _valueController,
-              labelText: _valueLabelText,
-              hintText: _valueHintText,
+              labelText: valueLabelText,
+              hintText: valueHintText,
               textInputType: TextInputType.number,
             ),
             ConfirmButton(
-              buttonText: _sending ? _sendingText : _buttonTransferText,
-              onPressed: () => _onPressed(),
+              buttonText: _sending ? _sendingText : buttonTransferText,
+              onPressed: () => _onPressed(dependencies.webClient),
               isDisable: _sending,
             )
           ],
@@ -82,7 +83,7 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  _onPressed() {
+  _onPressed(TransactionWebClient webClient) {
     final double value = double.tryParse(_valueController.text);
     final transactionCreated = ModelTransaction(
       id: transactionId,
@@ -90,10 +91,10 @@ class _TransactionFormState extends State<TransactionForm> {
       contact: widget.contact,
     );
 
-    openAuthDialog(transactionCreated);
+    openAuthDialog(transactionCreated, webClient);
   }
 
-  _onConfirm(ModelTransaction transactionCreated, String password) async {
+  _onConfirm(ModelTransaction transactionCreated, String password, TransactionWebClient webClient) async {
     setState(() {
       _sending = true;
     });
@@ -111,13 +112,13 @@ class _TransactionFormState extends State<TransactionForm> {
     }
   }
 
-  void openAuthDialog(ModelTransaction transactionCreated) {
+  void openAuthDialog(ModelTransaction transactionCreated, TransactionWebClient webClient) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (contextDialog) {
           return AuthDialog(
-            onConfirm: (password) => _onConfirm(transactionCreated, password),
+            onConfirm: (password) => _onConfirm(transactionCreated, password, webClient),
           );
         });
   }

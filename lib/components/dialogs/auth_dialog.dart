@@ -2,8 +2,9 @@ import 'package:bytebank/bytebank.dart';
 import 'package:flutter/material.dart';
 
 const String _alertTitle = 'Authenticate';
-const String _alertConfirm = 'Confirm';
-const String _alertCancel = 'Cancel';
+const String alertConfirm = 'Confirm';
+const String alertCancel = 'Cancel';
+const Key authTextFieldKey = Key('auth_text_field');
 
 class AuthDialog extends StatefulWidget {
   final Function onConfirm;
@@ -22,6 +23,7 @@ class _AuthDialogState extends State<AuthDialog> {
     return AlertDialog(
       title: Text(_alertTitle),
       content: TextField(
+        key: authTextFieldKey,
         controller: _controller,
         obscureText: true,
         maxLength: 4,
@@ -32,11 +34,11 @@ class _AuthDialogState extends State<AuthDialog> {
       ),
       actions: [
         DialogButton(
-          buttonText: _alertCancel,
+          buttonText: alertCancel,
           onPressed: () => Navigator.pop(context),
         ),
         DialogButton(
-          buttonText: _alertConfirm,
+          buttonText: alertConfirm,
           onPressed: () {
             widget.onConfirm(_controller.text);
             return Navigator.pop(context);

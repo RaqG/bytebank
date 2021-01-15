@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 const String _editContact = 'Edit contact';
 const String _deleteContact = 'Delete contact';
-const String _createTransaction = 'Create transaction';
+const String createTransaction = 'Create transaction';
 const String _alertTitle = 'Choose an option';
 
 class ContactItem extends StatelessWidget {
@@ -41,14 +41,16 @@ class ContactItem extends StatelessWidget {
           SimpleDialogItem(
             icon: Icons.monetization_on_outlined,
             iconColor: Colors.green,
-            itemName: _createTransaction,
+            itemName: createTransaction,
             onClick: () => onPushScreen(TransactionForm(contact: contact)),
           ),
           SimpleDialogItem(
             icon: Icons.edit_outlined,
             iconColor: Colors.grey,
             itemName: _editContact,
-            onClick: () => onPushScreen(ContactForm(contact: contact)),
+            onClick: () => onPushScreen(
+              ContactForm(contact: contact),
+            ),
           ),
           SimpleDialogItem(
             icon: Icons.delete_outline,

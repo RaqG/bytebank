@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:bytebank/bytebank.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
 const _errorMessage = 'Reveja os dados informados no formulário';
@@ -14,7 +17,10 @@ const _accountHintText = 'Ex.: 083274';
 class ContactForm extends StatefulWidget {
   final ModelContact contact;
 
-  const ContactForm({Key key, this.contact}) : super(key: key);
+  const ContactForm({
+    Key key,
+    this.contact,
+  }) : super(key: key);
 
   @override
   _ContactFormState createState() => _ContactFormState();
@@ -26,7 +32,6 @@ class _ContactFormState extends State<ContactForm> {
       TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final ContactDao _dao = ContactDao();
   bool isEdit = false;
 
   @override
@@ -42,6 +47,7 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
+    AppDependencies dependencies = AppDependencies.of(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -64,7 +70,7 @@ class _ContactFormState extends State<ContactForm> {
             ),
             ConfirmButton(
               buttonText: isEdit ? _editButton : _saveButton,
-              onPressed: () => _createUpdateContact(),
+              onPressed: () => _createUpdateContact(dependencies.contactDao),
             ),
           ],
         ),
@@ -72,26 +78,32 @@ class _ContactFormState extends State<ContactForm> {
     );
   }
 
-  _createUpdateContact() {
+  _createUpdateContact(ContactDao contactDao) {
+    final int contactId = widget?.contact?.id ?? null;
     final String fullName = _fullNameTextController.text;
     final int accountNumber = int.tryParse(_accountNumberTextController.text);
     if (fullName != null && accountNumber != null) {
-      final ModelContact newContact =
-          ModelContact(id: 0, name: fullName, accountNumber: accountNumber);
-      isEdit ? updateContact(newContact) : saveContact(newContact);
+      final ModelContact newContact = ModelContact(
+          id: contactId, name: fullName, accountNumber: accountNumber);
+      isEdit
+          ? updateContact(newContact, contactDao)
+          : saveContact(newContact, contactDao);
     } else {
       _scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text(_errorMessage)));
     }
   }
 
-  Future<Function> saveContact(ModelContact newContact) =>
-      _dao.save(newContact).then((id) => _navigatorPop());
+  FutureOr<void> saveContact(
+      ModelContact newContact, ContactDao contactDao) async {
+    await contactDao.save(newContact);
+    _navigatorPop();
+  }
 
-  Future<Function> updateContact(ModelContact newContact) {
-    return _dao
-        .update(newContact, widget.contact.id)
-        .then((id) => _navigatorPop());
+  FutureOr<void> updateContact(
+      ModelContact newContact, ContactDao contactDao) async {
+    await contactDao.update(newContact, widget.contact.id);
+    _navigatorPop();
   }
 
   _navigatorPop() {

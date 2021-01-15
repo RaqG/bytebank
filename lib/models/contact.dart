@@ -21,10 +21,23 @@ class ModelContact {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.id != null) data['id'] = this.id;
     if (this.name != null) data['name'] = this.name;
-    if (this.accountNumber != null && !isContact) data['accountNumber'] = this.accountNumber;
-    if (this.accountNumber != null && isContact) data['account_number'] = this.accountNumber;
+    if (this.accountNumber != null && !isContact)
+      data['accountNumber'] = this.accountNumber;
+    if (this.accountNumber != null && isContact)
+      data['account_number'] = this.accountNumber;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ModelContact &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          accountNumber == other.accountNumber;
+
+  @override
+  int get hashCode => name.hashCode ^ accountNumber.hashCode;
 
   @override
   String toString() {
